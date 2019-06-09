@@ -1,0 +1,13 @@
+version: '2'
+services:
+    opentsdb:
+        image: opentsdb:2.3.1
+        environment:
+            - WAITSECS=30    
+        ports:
+            - 14242:14242
+            - 16010:16010
+        volumes:  
+            - "/data/hbase:/data/hbase"
+            - "/etc/localtime:/etc/localtime"
+

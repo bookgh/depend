@@ -1,0 +1,9 @@
+version: '2'
+services:
+
+    hazelcast:
+        image: hazelcast:3.9.1
+        environment:
+            GROUP_NAME: mango-prod
+        ports:
+            - 5701:5701

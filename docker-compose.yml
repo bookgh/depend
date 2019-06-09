@@ -1,0 +1,59 @@
+version: '3.1'
+services:
+  zookeeper:
+      image: bookgh/zookeeper:3.4.14
+      hostname: zookeeper
+      restart: always
+      volumes:
+          - /data/zookeeper/data:/data
+          - /data/zookeeper/logs:/logs
+          - /data/zookeeper/datalog:/datalog
+      ports:
+          - 2181:2181
+
+  kafka:
+      image: bookgh/kafka:2.12-2.2.0
+      hostname: kafka
+      restart: always
+      environment:
+          KAFKA_ADVERTISED_HOST_NAME: kafka
+          KAFKA_ADVERTISED_PORT: 9092
+          KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+          KAFKA_CREATE_TOPICS: "topic-jhipster:1:1,calc:10:1"
+      volumes:
+          - /data/kafka:/kafka
+      ports:
+          - 9092:9092
+
+  opentsdb:
+      image: bookgh/opentsdb:2.3.1
+      hostname: opentsdb
+      restart: always
+      environment:
+          - WAITSECS=30    
+      ports:
+          - 14242:14242
+          - 16010:16010
+      volumes:  
+          - "/data/hbase:/data/hbase"
+
+  fastdfs:
+      image: bookgh/fastdfs:alpine
+      hostname: fastdfs
+      restart: always
+      environment:
+          TRACKER_SERVER: fastdfs:22122 
+      volumes:
+          - /data/fastdfs:/home/fdfs
+      ports:
+          - 8888:8888
+          - 22122:22122
+   
+  hazelcast:
+      image: bookgh/hazelcast:3.9.1
+      hostname: hazelcast
+      restart: always
+      environment:
+          GROUP_NAME: mango-prod
+      ports:
+          - 5701:5701
